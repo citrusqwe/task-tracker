@@ -1,0 +1,14 @@
+.projects {
+  padding: 20px 0;
+  width: 90%;
+  margin: 0 auto;
+
+  &__empty {
+    text-align: center;
+  }
+
+  &__spin {
+    width: 40px;
+    margin: 100px auto;
+  }
+}

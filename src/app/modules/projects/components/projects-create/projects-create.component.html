@@ -1,0 +1,41 @@
+<nz-layout>
+  <nz-page-header>
+    <nz-page-header-title>Создать проект</nz-page-header-title>
+  </nz-page-header>
+  <nz-content>
+    <form (ngSubmit)="onSubmit()" [formGroup]="form" nz-form>
+      <nz-form-item>
+        <nz-form-label>Имя</nz-form-label>
+        <nz-form-control nzSpan="10">
+          <input formControlName="name" id="" name="" nz-input type="text">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>ID</nz-form-label>
+        <nz-form-control nzSpan="4">
+          <input formControlName="projectId" id="" name="" nz-input type="text">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>Начальный номер</nz-form-label>
+        <nz-form-control nzSpan="2">
+          <input formControlName="initialNum" id="" name="" nz-input type="number">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>Описание</nz-form-label>
+        <nz-form-control>
+          <textarea formControlName="description" id="" name="" nz-input type="text"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="project-create__btns">
+        <nz-form-control nzSpan="5">
+          <button nz-button nzType="primary" type="submit">Создать проект</button>
+        </nz-form-control>
+        <nz-form-control nzSpan="5">
+          <button nz-button routerLink="/projects">Отмена</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-content>
+</nz-layout>

@@ -1,0 +1,31 @@
+<div class="header">
+  <nav class="header__nav nav">
+    <a href="">Логотип</a>
+    <ul class="nav__list list">
+      <li class="list__item">
+        <a class="list__link" href="">
+          <span class="icon"></span>
+          Доска
+        </a>
+      </li>
+      <li class="list__item">
+        <a class="list__link" href="/projects">
+          <span class="icon"></span>
+          Проекты
+        </a>
+      </li>
+    </ul>
+    <ul class="profile">
+      <div [nzDropdownMenu]="menu" class="profile__avatar" nz-dropdown nzTrigger="click">
+        <img alt="avatar" src="assets/avatar.svg">
+        <span nz-icon nzType="down"></span>
+      </div>
+      <nz-dropdown-menu #menu>
+        <ul class="profile__menu" nz-menu>
+          <li nz-menu-item>Профиль</li>
+          <li nz-menu-item>Выйти</li>
+        </ul>
+      </nz-dropdown-menu>
+    </ul>
+  </nav>
+</div>

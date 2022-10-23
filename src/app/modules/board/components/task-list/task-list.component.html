@@ -1,0 +1,68 @@
+<div
+  (cdkDropListDropped)="drop($event)"
+  [cdkDropListData]="list"
+  cdkDropList
+  class="list">
+  <div *ngFor="let item of list" cdkDrag class="box">{{item}}</div>
+  <div (click)="isPopoverOpen = true" (nzPopoverVisibleChange)="popoverVisibleChange($event)"
+       [nzPopoverContent]="createTaskForm"
+       [nzPopoverVisible]="isPopoverOpen"
+       class="list__btn" nz-popover nzPopoverPlacement="bottomLeft"
+       nzPopoverTrigger="click">
+    <span nz-icon nzTheme="outline" nzType="plus"></span>
+    <button>Новая карточка</button>
+  </div>
+</div>
+<ng-template #createTaskForm>
+  <div>
+    <form [formGroup]="form" class="task-form" nz-form>
+      <div class="task-form__body">
+        <nz-form-item>
+          <nz-form-control>
+            <input formControlName="title" nz-input placeholder="Заголовок" type="text">
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <textarea class="task-form__textarea" formControlName="description" nz-input placeholder="Описание"
+                      type="text"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <button [disabled]="form.invalid" nz-button nzType="primary" (click)="createProject()">Добавить</button>
+          </nz-form-control>
+          <nz-form-control (click)="isPopoverOpen = false">
+            <button nz-button>Отменить</button>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="task-form__panel">
+        <nz-form-item>
+          <nz-form-label>Проект</nz-form-label>
+          <nz-form-control>
+            <div>{{currentProject.name}}</div>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>Приоритет</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="priority">
+              <nz-option *ngFor="let priority of priorities" [nzLabel]="priority.label"
+                         [nzValue]="priority.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>Исполнитель</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="priority">
+              <nz-option *ngFor="let priority of priorities" [nzLabel]="priority.label"
+                         [nzValue]="priority.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </div>
+</ng-template>

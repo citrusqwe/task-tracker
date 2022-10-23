@@ -1,0 +1,29 @@
+@import "src/app/styles/vars";
+
+.project {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 1px solid $border-color;
+
+  &__name {
+    cursor: pointer;
+
+    &:hover {
+      color: #cccccc;
+    }
+  }
+
+  &__btn {
+    padding: 0;
+    border: none;
+    background: unset;
+    font-size: 24px;
+    cursor: pointer;
+
+    &:hover {
+      color: #cccccc;
+    }
+  }
+}

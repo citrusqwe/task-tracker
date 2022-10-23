@@ -1,0 +1,34 @@
+<div class="board-filter">
+  <form nz-form>
+    <div nz-row class="board-filter__body">
+      <nz-form-item>
+        <nz-form-control>
+          <nz-select>
+            <nz-option nzLabel="test" nzValue="test"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group [nzAddOnAfter]="searchBtn" nzSearch>
+            <input nz-input placeholder="Фильтровать задачи" type="text">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+  <ng-template #searchBtn>
+    <button nz-button nzSearch><span nz-icon nzType="search"></span></button>
+  </ng-template>
+</div>
+<div cdkDropListGroup class="board" *ngIf="!isBoardLoading else loading">
+  <div class="board__item board-item" *ngFor="let column of project.columns">
+    <h3 class="board-item__title">{{column.name}}</h3>
+    <app-task-list [column]="column"></app-task-list>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="projects__spin">
+    <nz-spin [nzSize]="'large'" nzSimple></nz-spin>
+  </div>
+</ng-template>

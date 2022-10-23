@@ -1,0 +1,43 @@
+<div class="auth">
+  <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" class="auth__form" nz-form>
+    <a href="">Logo</a>
+    <h3>Регистрация</h3>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Введите корректный email">
+        <nz-input-group nzPrefixIcon="mail">
+          <input formControlName="email" nz-input placeholder="E-mail" type="email">
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Введите пароль от 8 до 100 символов">
+        <nz-input-group nzPrefixIcon="lock">
+          <input (ngModelChange)="updateConfirmValidator()" formControlName="password" nz-input placeholder="Пароль"
+                 type="password">
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzErrorTip]="passwordMatchError">
+        <nz-input-group nzPrefixIcon="lock">
+          <input formControlName="passwordMatch" nz-input placeholder="Пароль еще раз" type="password">
+        </nz-input-group>
+        <ng-template #passwordMatchError let-control>
+          <ng-container *ngIf="control.hasError('required')">Подтвердите ваш пароль</ng-container>
+          <ng-container *ngIf="control.hasError('confirm')">
+            Пароли не совпадают
+          </ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <button [disabled]="registerForm.invalid" nz-button nzType="primary" type="submit">Зарегистрироваться</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <div class="auth__footer auth-footer">
+    <span class="auth-footer__text">Уже зарегистрированы?</span>
+    <a class="auth-footer__link" routerLink="/auth/login">Войдите</a>
+  </div>
+</div>

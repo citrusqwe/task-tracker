@@ -1,0 +1,29 @@
+<div class="auth">
+  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="auth__form" nz-form>
+    <a href="">Logo</a>
+    <h3>Войти</h3>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Введите корректный email">
+        <nz-input-group nzPrefixIcon="mail">
+          <input formControlName="email" nz-input placeholder="E-mail" type="email">
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="lock">
+          <input formControlName="password" nz-input placeholder="Пароль" type="password">
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <button [disabled]="loginForm.invalid" nz-button nzType="primary" type="submit">Войти</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <div class="auth__footer auth-footer">
+    <span class="auth-footer__text">Еще не зарегистрированы?</span>
+    <a class="auth-footer__link" routerLink="/auth/register">Регистрация</a>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<nz-layout>
+  <nz-page-header>
+    <nz-page-header-title>Проекты</nz-page-header-title>
+  </nz-page-header>
+  <nz-content>
+    <div class="projects">
+      <div *ngIf="!isLoading else loading">
+        <div *ngIf="!projectsCount" class="projects__empty">
+          Проектов пока нет.
+          <a nz-button nzType="link" routerLink="/projects/create">Создайте проект.</a>
+        </div>
+        <app-project-item *ngFor="let project of projects" [project]="project"></app-project-item>
+      </div>
+      <ng-template #loading>
+        <div class="projects__spin">
+          <nz-spin [nzSize]="'large'" nzSimple></nz-spin>
+        </div>
+      </ng-template>
+    </div>
+  </nz-content>
+</nz-layout>

@@ -1,0 +1,28 @@
+@import "src/app/styles/vars";
+
+.board {
+  margin-top: 30px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.board-item {
+  width: 100%;
+  border: 1px solid $border-color;
+
+  &__title {
+    padding: 10px;
+    margin: 0;
+  }
+}
+
+.board-filter {
+  &__items {
+    display: flex;
+  }
+
+  &__body {
+    width: 100%;
+    flex: 1;
+  }
+}
