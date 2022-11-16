@@ -1,0 +1,100 @@
+<div class="issue-preview" *ngIf="!isLoading else loading">
+  <form nz-form nzLayout="vertical" [formGroup]="form">
+    <div class="issue-preview__header">
+      <button nz-button (click)="closePreview()"><span nz-icon nzType="close" nzTheme="outline"></span>Закрыть панель
+        быстрого просмотра
+      </button>
+      <div>{{projectId}}</div>
+    </div>
+    <div class="issue-preview__hero">
+      <div class="issue-preview__authors authors">
+        <div class="authors__item">
+          <span>Автор</span> {{issue.creator.email}}
+        </div>
+        <!--      <div class="authors__item">-->
+        <!--        <span>Обновлено</span> citrusqwe-->
+        <!--      </div>-->
+      </div>
+      <div>
+        <nz-select nzPlaceHolder="Отображать для..." [nzOptions]="projectExecutors">
+        </nz-select>
+      </div>
+    </div>
+    <div class="issue-preview__title title">
+      <h3 class="title__title">{{issue.title}}</h3>
+      <button class="title__btn" nz-button nzShape="circle"><span nz-icon nzType="edit" nzTheme="outline"></span>
+      </button>
+      <button class="title__btn" nz-button nzShape="circle"><span nz-icon nzType="ellipsis" nzTheme="outline"></span>
+      </button>
+    </div>
+    <div>
+      <div nz-row>
+        <nz-form-item class="cell" nz-col nzSpan="8">
+          <nz-form-label>Проект</nz-form-label>
+          <nz-form-control>
+            <app-select-project [elementFormControl]="form.get('projectId')"></app-select-project>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="cell" nz-col nzSpan="8">
+          <nz-form-label>Приоритет</nz-form-label>
+          <nz-form-control>
+            <nz-select [formControlName]="'priority'">
+              <nz-option *ngFor="let p of issuePriority" [nzLabel]="p.label" [nzValue]="p.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="cell" nz-col nzSpan="8">
+          <nz-form-label>Тип</nz-form-label>
+          <nz-form-control>
+            <nz-select [formControlName]="'type'">
+              <nz-option *ngFor="let t of issueTypes" [nzLabel]="t.label" [nzValue]="t.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="cell" nz-col nzSpan="8">
+          <nz-form-label>Состояние</nz-form-label>
+          <nz-form-control>
+            <nz-select [formControlName]="'state'">
+              <nz-option *ngFor="let s of issueState" [nzLabel]="s.label" [nzValue]="s.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="cell" nz-col nzSpan="8">
+          <nz-form-label>Исполнитель</nz-form-label>
+          <nz-form-control>
+            <nz-select [nzAllowClear]="true" [nzOptions]="projectExecutors" [formControlName]="'executor'">
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row>
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button nzType="primary" [disabled]="form.invalid" (click)="updateIssue()">Сохранить</button>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div class="issue-preview__comments comments">
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-control class="textarea-control">
+            <textarea class="textarea-control__item" nz-input></textarea>
+            <button class="textarea-control__btn" nz-button nzShape="circle">
+              <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <div nz-row>
+            <button class="comments__form-btn" nz-button>Добавить комментарий</button>
+            <button class="comments__form-btn" nz-button>Отмена</button>
+          </div>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</div>
+<ng-template #loading>
+  <nz-spin nzSize="large"></nz-spin>
+</ng-template>

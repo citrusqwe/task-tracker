@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (data) => {
           console.log(data)
-          this.router.navigateByUrl('/board')
+          this.router.navigateByUrl('/projects')
         },
         error: (err) => {
           this.supabaseService.showMessage('error', err.message)

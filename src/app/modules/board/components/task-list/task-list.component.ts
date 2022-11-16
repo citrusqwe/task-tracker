@@ -12,7 +12,6 @@ import {SupabaseService} from "../../../../services/supabase.service";
 export class TaskListComponent implements OnInit {
   @Input() column: any | null = null;
   currentProject: any | null = null;
-  list: any[] = [];
   public priorities = priorities
   isPopoverOpen = false
 
@@ -58,9 +57,11 @@ export class TaskListComponent implements OnInit {
     }
   }
 
-  createProject() {
-    const data = {...this.form.getRawValue(), created_at: new Date(), updated_at: new Date()};
-    this.supabaseService.createIssue(data);
+  createIssue() {
+    const project = this.supabaseService.currentProject.value;
+    const issue = {...this.form.getRawValue(), created_at: new Date(), updated_at: new Date()};
+    const newColumns = project.columns.map((item: any) => item.uid === this.column.uid ? {...item, issues: [...item.issues, issue]} : item);
+    this.supabaseService.createIssueBoard(newColumns, project.id);
   }
 
   ngOnInit(): void {
@@ -68,5 +69,6 @@ export class TaskListComponent implements OnInit {
     this.form.get('projectId')?.setValue(this.currentProject.id);
     this.form.get('stage')?.setValue(this.column);
     this.form.get('creator')?.setValue(this.supabaseService.user);
+    console.log(this.column.issues)
   }
 }

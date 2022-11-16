@@ -32,6 +32,10 @@
 }
 
 .profile {
+  &__name {
+    margin-right: 10px;
+  }
+
   &__avatar {
     display: flex;
     align-items: center;

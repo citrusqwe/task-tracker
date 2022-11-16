@@ -10,6 +10,16 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
+      <nz-form-control nzErrorTip="Введите корректный email">
+        <input formControlName="firstName" nz-input placeholder="Имя" type="text">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Введите корректный email">
+        <input formControlName="lastName" nz-input placeholder="Фамилия" type="text">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
       <nz-form-control nzErrorTip="Введите пароль от 8 до 100 символов">
         <nz-input-group nzPrefixIcon="lock">
           <input (ngModelChange)="updateConfirmValidator()" formControlName="password" nz-input placeholder="Пароль"

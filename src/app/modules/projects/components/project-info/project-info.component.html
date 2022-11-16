@@ -1,0 +1,26 @@
+<div *ngIf="!isLoading else loading">
+  <nz-page-header [nzTitle]="project.name">
+  </nz-page-header>
+  <div class="project-info">
+    <div class="project-sidebar">
+      <nz-card>
+        <p>Информация</p>
+      </nz-card>
+    </div>
+    <div class="project-grid">
+      <nz-card [nzTitle]="project.name + ' команда'">
+        <p>Card content</p>
+        <p>Card content</p>
+        <p>Card content</p>
+      </nz-card>
+      <nz-card [nzTitle]="project.name + ' задачи'">
+        <p>Card content</p>
+        <p>Card content</p>
+        <p>Card content</p>
+      </nz-card>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <nz-spin nzSize="large"></nz-spin>
+</ng-template>

@@ -23,8 +23,8 @@ export class BoardComponent implements OnInit {
   ngOnInit(): void {
     this.isBoardLoading = true;
     forkJoin([
-      this.supabaseService.getProject(2),
-      this.supabaseService.getIssues(2)
+      this.supabaseService.getProject(4),
+      this.supabaseService.getIssues(4)
     ]).subscribe(([project, issues]) => {
       this.project = project.data[0] || null;
       this.issues = issues.data || [];

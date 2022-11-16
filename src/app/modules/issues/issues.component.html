@@ -1,0 +1,171 @@
+<div class="issues">
+  <div class="issues__filters">
+    <form nz-form nzLayout="vertical">
+      <div nz-row nzGutter="16">
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label>Состояние</nz-form-label>
+            <nz-form-control>
+              <nz-select nzMode="multiple">
+                <nz-option nzLabel="first"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label>Исполнитель</nz-form-label>
+            <nz-form-control>
+              <nz-select nzMode="multiple">
+                <nz-option nzLabel="first"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label>Тип</nz-form-label>
+            <nz-form-control>
+              <nz-select nzMode="multiple">
+                <nz-option nzLabel="first"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label></nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="Искать задачи">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label></nz-form-label>
+            <nz-form-control>
+              <button nz-button nzType="primary" (click)="showModal($event)">Создать задачу</button>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="issues__content">
+    <div class="issues__table">
+      <nz-table #basicTable [nzData]="issues" [nzLoading]="isIssuesLoading" [nzPaginationType]="'small'">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Заголовок задачи</th>
+          <th>Испольнитель</th>
+          <th>Создана</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of basicTable.data" (click)="openPreview(data.id)">
+          <td>{{data.id}}</td>
+          <td>{{data.title}}</td>
+          <td>{{data.executor?.email || 'Не назначен'}}</td>
+          <td>{{data.created_at | date}}</td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="issues__preview" *ngIf="isPreviewOpen">
+      <app-issue-preview></app-issue-preview>
+    </div>
+  </div>
+</div>
+<nz-modal
+  [(nzVisible)]="isCreateModalVisible"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCreateIssueCancel()"
+  nzWidth="800px"
+>
+  <!--  <ng-template #modalTitle></ng-template>-->
+
+  <ng-template #modalContent>
+    <div class="modal-content">
+      <div class="modal-content__form form">
+        <div class="form__header">
+          <div>
+            Автор author
+          </div>
+          <div>
+            <nz-select>
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div>
+          <form nz-form [formGroup]="form">
+            <nz-form-item>
+              <nz-form-control>
+                <input [formControlName]="'title'" nzSize="large" nz-input type="text" placeholder="Заголовок">
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control>
+                <textarea class="form__textarea" [formControlName]="'description'" nzSize="large" nz-input type="text"
+                          placeholder="Описание"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+        </div>
+      </div>
+      <div class="modal-content__selects">
+        <form nz-form nzLayout="vertical" [formGroup]="selectsForm">
+          <nz-form-item>
+            <nz-form-label>Проект</nz-form-label>
+            <nz-form-control>
+              <nz-select [formControlName]="'projectId'" nzPlaceHolder="Выберите">
+                <nz-option *ngFor="let p of projects" [nzLabel]="p.name" [nzValue]="p.id"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>Приоритет</nz-form-label>
+            <nz-form-control>
+              <nz-select [formControlName]="'priority'" nzPlaceHolder="Выберите">
+                <nz-option *ngFor="let p of issuePriority" [nzLabel]="p.label" [nzValue]="p.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>Тип</nz-form-label>
+            <nz-form-control>
+              <nz-select [formControlName]="'type'" nzPlaceHolder="Выберите">
+                <nz-option *ngFor="let t of issueTypes" [nzLabel]="t.label" [nzValue]="t.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>Состояние</nz-form-label>
+            <nz-form-control>
+              <nz-select [formControlName]="'state'" nzPlaceHolder="Выберите">
+                <nz-option *ngFor="let s of issueState" [nzLabel]="s.label" [nzValue]="s.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>Испольнитель</nz-form-label>
+            <nz-form-control>
+              <nz-select [formControlName]="'executor'" nzAllowClear="true" nzPlaceHolder="Выберите">
+                <nz-option *ngFor="let e of executors" [nzLabel]="e.email" [nzValue]="e.id"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <div nz-row>
+      <button nz-button [disabled]="selectsForm.invalid || form.invalid" (click)="createIssue()">Создать</button>
+      <button nz-button (click)="handleCreateIssueCancel()">Отмена</button>
+    </div>
+  </ng-template>
+</nz-modal>

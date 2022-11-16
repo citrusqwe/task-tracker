@@ -1,0 +1,60 @@
+.issues {
+  width: 96%;
+  margin: 0 auto;
+
+  &__filters {
+    margin-bottom: 30px;
+  }
+
+  &__content {
+    display: flex;
+  }
+
+  &__table {
+    flex: 1;
+  }
+
+  &__preview {
+    flex: 0.8;
+    border-left: 1px solid #f0f0f0;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+.modal-content {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+
+  &__form {
+    flex: 0.9;
+  }
+
+  &__selcts {
+    flex: 1;
+  }
+
+  &__select {
+    span {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.form {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  &__textarea {
+    min-height: 250px;
+  }
+}

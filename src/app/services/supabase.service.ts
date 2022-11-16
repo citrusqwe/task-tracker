@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AuthChangeEvent, createClient, Session, SupabaseClient} from "@supabase/supabase-js";
 import {environment} from "../../environments/environment";
-import {BehaviorSubject, catchError, from, throwError} from "rxjs";
+import {BehaviorSubject, catchError, from, map, tap, throwError} from "rxjs";
 import {NzMessageService} from "ng-zorro-antd/message";
 
 @Injectable({
@@ -13,6 +13,10 @@ export class SupabaseService {
 
   currentProject = new BehaviorSubject<any>(null);
   currentProject$ = this.currentProject.asObservable();
+  projects = new BehaviorSubject<any>([]);
+  projects$ = this.projects.asObservable();
+  executors = new BehaviorSubject<any>([]);
+  executors$ = this.executors.asObservable();
 
   constructor(private message: NzMessageService) {
   }
@@ -25,12 +29,48 @@ export class SupabaseService {
     return this.supabase.auth.session()
   }
 
-  get profile() {
-    return this.supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', this.user?.id)
-      .single()
+  profile() {
+    const response = new Promise<any>(async (resolve, reject) => {
+      const {data, error} = await this.supabase.from('profiles').select('*')
+        .eq('id', this.user?.id)
+        .single();
+      if (error) {
+        reject(error)
+      } else {
+        resolve(data)
+      }
+    })
+    return from(response).pipe(catchError(err => throwError(err)))
+  }
+
+  updateProfile(id: number, data: any) {
+    const response = new Promise<any>(async (resolve, reject) => {
+      const {error} = await this.supabase
+        .from('profiles')
+        .update(data)
+        .eq('id', id)
+      if (error) {
+        reject(error)
+      } else {
+        resolve({})
+      }
+    })
+    return from(response).pipe(catchError(err => throwError(err)))
+  }
+
+  searchUsers(field: string, user: any) {
+    const response = new Promise<any>(async (resolve, reject) => {
+      const {data, error} = await this.supabase
+        .from('profiles')
+        .select('*')
+        .textSearch(field, user)
+      if (error) {
+        reject(error)
+      } else {
+        resolve(data)
+      }
+    })
+    return from(response).pipe(catchError(err => throwError(err)))
   }
 
   authChanges(
@@ -39,9 +79,15 @@ export class SupabaseService {
     return this.supabase.auth.onAuthStateChange(callback)
   }
 
-  signUp(email: string, password: string) {
+  signUp(data: any) {
     const response = new Promise<any>(async (resolve, reject) => {
-      const {user, error} = await this.supabase.auth.signUp({email, password})
+      console.log(data)
+      const {user, error} = await this.supabase.auth
+        .signUp({email: data.email, password: data.password}, {
+          data: {
+            full_name: `${data.firstName} ${data.lastName}`,
+          }
+        });
       if (error) {
         reject(error)
       } else {
@@ -65,7 +111,8 @@ export class SupabaseService {
 
   getProjects() {
     const response = new Promise<any>(async (resolve, reject) => {
-      const {data, error, count} = await this.supabase.from('projects').select('*', {count: 'exact'})
+      const {data, error, count} = await this.supabase.from('projects')
+        .select('*', {count: 'exact'})
       if (error) {
         reject(error)
       } else {
@@ -103,6 +150,35 @@ export class SupabaseService {
     return from(response).pipe(catchError(err => throwError(err)))
   }
 
+  getAllIssues() {
+    const response = new Promise<any>(async (resolve, reject) => {
+      const {data, error, count} = await this.supabase.from('issues')
+        .select('*', {count: 'exact'})
+      if (error) {
+        reject(error)
+      } else {
+        resolve({data, count})
+      }
+    })
+    return from(response).pipe(catchError(err => throwError(err)))
+  }
+
+  getIssue(id: number) {
+    const response = new Promise<any>(async (resolve, reject) => {
+      if (id) {
+        const {data, error} = await this.supabase.from('issues')
+          .select('*')
+          .eq('id', id)
+        if (error) {
+          reject(error)
+        } else {
+          resolve(data)
+        }
+      }
+    })
+    return from(response).pipe(catchError(err => throwError(err)))
+  }
+
   createProject(data: any) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {error} = await this.supabase
@@ -116,14 +192,41 @@ export class SupabaseService {
     return from(response).pipe(catchError(err => throwError(err)))
   }
 
-  createIssue(data: any) {
+  createIssueBoard(columns: any, projectId: number) {
+    // const response = new Promise<any>(async (resolve, reject) => {
+    //   const {error} = await this.supabase
+    //     .from('issues').insert(columns)
+    //   if (error) {
+    //     reject(error)
+    //   } else {
+    //     resolve({})
+    //   }
+    // })
     const response = new Promise<any>(async (resolve, reject) => {
-      const {error} = await this.supabase
-        .from('issues').insert(data)
+      const {data, error} = await this.supabase
+        .from('projects')
+        .update({columns})
+        .eq('id', projectId)
+        .select()
       if (error) {
         reject(error)
       } else {
-        resolve({})
+        resolve(data)
+      }
+    })
+    return from(response).pipe(catchError(err => throwError(err)))
+  }
+
+  createIssue(issue: any) {
+    const response = new Promise<any>(async (resolve, reject) => {
+      const {data, error} = await this.supabase
+        .from('issues')
+        .insert(issue)
+        .select()
+      if (error) {
+        reject(error)
+      } else {
+        resolve(data)
       }
     })
     return from(response).pipe(catchError(err => throwError(err)))

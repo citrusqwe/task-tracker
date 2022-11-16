@@ -1,0 +1,37 @@
+<nz-page-header nzTitle="Профиль">
+</nz-page-header>
+<div class="profile">
+  <form nz-form [formGroup]="form">
+    <div>
+      <nz-form-item>
+        <nz-form-label class="profile-form__label">Имя и фамилия</nz-form-label>
+        <nz-form-control>
+          <input nz-input  [formControlName]="'full_name'">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label class="profile-form__label">Имя пользователя</nz-form-label>
+        <nz-form-control>
+          <input nz-input [formControlName]="'username'">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label class="profile-form__label">Email</nz-form-label>
+        <nz-form-control>
+          <input nz-input [formControlName]="'email'">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label class="profile-form__label">Аватар</nz-form-label>
+        <nz-form-control>
+          <input nz-input [formControlName]="'avatar_url'">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button nzType="primary" (click)="updateProfile()">Сохранить</button>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+</div>

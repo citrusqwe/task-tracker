@@ -1,4 +1,11 @@
 <div class="project">
-  <span class="project__name">{{project.name}}</span>
-  <button class="project__btn"><span nz-icon nzType="ellipsis" nzTheme="outline"></span></button>
+  <span class="project__name" [routerLink]="'/projects/' + project.id">{{project.name}}</span>
+  <button class="project__btn" [nzDropdownMenu]="menu" nz-dropdown nzTrigger="click">
+    <span nz-icon nzType="ellipsis" nzTheme="outline"></span>
+  </button>
 </div>
+<nz-dropdown-menu #menu>
+  <ul class="profile__menu" nz-menu>
+    <li nz-menu-item [routerLink]="'/projects/edit/' + project.id">Редактировать</li>
+  </ul>
+</nz-dropdown-menu>

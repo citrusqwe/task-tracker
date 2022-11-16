@@ -1,0 +1,12 @@
+.profile {
+  max-width: 600px;
+  padding: 0 25px;
+}
+
+.profile-form {
+  &__label {
+    width: 100%;
+    max-width: 200px;
+    text-align: start;
+  }
+}

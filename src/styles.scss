@@ -30,3 +30,15 @@ a {
 .ant-layout {
   background: none;
 }
+
+.cell {
+  &:not(:last-child) {
+    padding-right: 10px;
+  }
+}
+
+.label-width {
+  width: 100%;
+  max-width: 150px;
+  text-align: start;
+}

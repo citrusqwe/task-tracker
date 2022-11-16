@@ -1,9 +1,9 @@
 <div
   (cdkDropListDropped)="drop($event)"
-  [cdkDropListData]="list"
+  [cdkDropListData]="column.issues"
   cdkDropList
   class="list">
-  <div *ngFor="let item of list" cdkDrag class="box">{{item}}</div>
+  <div *ngFor="let item of column.issues" cdkDrag class="box">{{item.title}}</div>
   <div (click)="isPopoverOpen = true" (nzPopoverVisibleChange)="popoverVisibleChange($event)"
        [nzPopoverContent]="createTaskForm"
        [nzPopoverVisible]="isPopoverOpen"
@@ -30,7 +30,7 @@
         </nz-form-item>
         <nz-form-item>
           <nz-form-control>
-            <button [disabled]="form.invalid" nz-button nzType="primary" (click)="createProject()">Добавить</button>
+            <button [disabled]="form.invalid" nz-button nzType="primary" (click)="createIssue()">Добавить</button>
           </nz-form-control>
           <nz-form-control (click)="isPopoverOpen = false">
             <button nz-button>Отменить</button>

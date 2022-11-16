@@ -27,16 +27,18 @@ export class RegisterComponent implements OnInit {
 
   registerForm = this.fb.group({
     email: new FormControl<string>('', [Validators.required, Validators.email]),
+    firstName: new FormControl<string>('', [Validators.required]),
+    lastName: new FormControl<string>('', [Validators.required]),
     password: new FormControl<string>('', [Validators.required, Validators.minLength(8), Validators.maxLength(100)]),
     passwordMatch: new FormControl<string>('', [Validators.required, this.confirmationValidator]),
   })
 
   onSubmit() {
-    this.supabaseService.signUp(this.registerForm.value.email as string, this.registerForm.value.password as string)
+    this.supabaseService.signUp(this.registerForm.getRawValue())
       .subscribe({
         next: (data) => {
           console.log(data)
-          this.router.navigateByUrl('/board')
+          this.router.navigateByUrl('/projects')
         },
         error: (err) => {
           this.supabaseService.showMessage('error', err.message)

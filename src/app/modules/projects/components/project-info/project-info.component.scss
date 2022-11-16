@@ -1,0 +1,17 @@
+.project-info {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.project-sidebar {
+  flex: 0.3;
+}
+
+.project-grid {
+  padding: 0 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  flex: 0.7;
+}

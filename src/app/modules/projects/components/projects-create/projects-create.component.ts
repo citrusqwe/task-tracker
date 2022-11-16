@@ -13,16 +13,20 @@ export class ProjectsCreateComponent implements OnInit {
   defaultColumns = [
     {
       uid: '1',
-      name: 'Открыта'
+      name: 'Открыта',
+      issues: []
     }, {
       uid: '2',
-      name: 'В обработке'
+      name: 'В обработке',
+      issues: []
     }, {
       uid: '3',
-      name: 'Исправлена'
+      name: 'Исправлена',
+      issues: []
     }, {
       uid: '4',
-      name: 'Проверена'
+      name: 'Проверена',
+      issues: []
     }
   ];
 
@@ -63,7 +67,7 @@ export class ProjectsCreateComponent implements OnInit {
     } else {
       this.supabaseService.createProject(this.form.getRawValue()).subscribe({
         next: () => {
-          this.router.navigateByUrl('/board')
+          this.router.navigateByUrl('/projects')
         }, error: (err) => {
           this.supabaseService.showMessage('error', err.message)
         }

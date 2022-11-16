@@ -12,11 +12,11 @@ const routes: Routes = [
       {path: '', pathMatch: 'full', redirectTo: 'register'},
     ]
   },
+  {path: 'profile', loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule)},
   {path: 'projects', loadChildren: () => import('./modules/projects/projects.module').then(m => m.ProjectsModule)},
   {path: 'board/:id', loadChildren: () => import('./modules/board/board.module').then(m => m.BoardModule)},
-  {path: '', pathMatch: 'full', redirectTo: '/board/1'},
-  // { path: '', pathMatch: 'full', redirectTo: '/welcome' },
-  // { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) }
+  {path: 'issues', loadChildren: () => import('./modules/issues/issues.module').then(m => m.IssuesModule)},
+  {path: '', pathMatch: 'full', redirectTo: '/issues'},
 ];
 
 @NgModule({
