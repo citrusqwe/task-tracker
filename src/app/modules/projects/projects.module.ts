@@ -22,29 +22,31 @@ import {NzSelectModule} from "ng-zorro-antd/select";
 import {NzListModule} from "ng-zorro-antd/list";
 import {NzTypographyModule} from "ng-zorro-antd/typography";
 import {NzModalModule} from "ng-zorro-antd/modal";
+import {NzAutocompleteModule} from "ng-zorro-antd/auto-complete";
 
 
 @NgModule({
   declarations: [ProjectsComponent, ProjectsCreateComponent, ProjectItemComponent, ProjectInfoComponent, ProjectEditComponent],
-  imports: [
-    CommonModule,
-    NzLayoutModule,
-    NzPageHeaderModule,
-    NzButtonModule,
-    NzFormModule,
-    NzInputModule,
-    ReactiveFormsModule,
-    NzSpinModule,
-    NzIconTestModule,
-    NzDropDownModule,
-    ProjectsRoutingModule,
-    NzCardModule,
-    NzTabsModule,
-    NzSelectModule,
-    NzListModule,
-    NzTypographyModule,
-    NzModalModule
-  ],
+    imports: [
+        CommonModule,
+        NzLayoutModule,
+        NzPageHeaderModule,
+        NzButtonModule,
+        NzFormModule,
+        NzInputModule,
+        ReactiveFormsModule,
+        NzSpinModule,
+        NzIconTestModule,
+        NzDropDownModule,
+        ProjectsRoutingModule,
+        NzCardModule,
+        NzTabsModule,
+        NzSelectModule,
+        NzListModule,
+        NzTypographyModule,
+        NzModalModule,
+        NzAutocompleteModule
+    ],
   exports: [ProjectsComponent, RouterModule]
 })
 export class ProjectsModule {

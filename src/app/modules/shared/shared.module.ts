@@ -12,9 +12,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NzIconModule} from "ng-zorro-antd/icon";
 import {NzFormModule} from "ng-zorro-antd/form";
 import {NzGridModule} from "ng-zorro-antd/grid";
+import {MainLayoutComponent} from "../../components/main-layout/main-layout.component";
 
 @NgModule({
-  declarations: [HeaderComponent, SelectProjectComponent, SelectExecutorComponent],
+  declarations: [HeaderComponent, SelectProjectComponent, SelectExecutorComponent, MainLayoutComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -29,7 +30,7 @@ import {NzGridModule} from "ng-zorro-antd/grid";
     NzFormModule,
     NzGridModule
   ],
-  exports: [HeaderComponent, SelectProjectComponent, SelectExecutorComponent]
+  exports: [HeaderComponent, SelectProjectComponent, SelectExecutorComponent, MainLayoutComponent]
 })
 export class SharedModule {
 }

@@ -9,10 +9,10 @@ import {SupabaseService} from "./services/supabase.service";
 export class AppComponent {
   title = 'task-tracker'
 
-  constructor(private supabaseService: SupabaseService) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.supabaseService.getProjects().subscribe(data => this.supabaseService.projects.next(data));
+
   }
 }

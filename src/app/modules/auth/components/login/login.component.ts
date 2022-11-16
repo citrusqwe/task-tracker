@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {SupabaseService} from "../../../../services/supabase.service";
 import {Router} from "@angular/router";
+import {NotificationService} from "../../../../services/notification.service";
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
   })
 
-  constructor(private fb: FormBuilder, private supabaseService: SupabaseService, private router: Router) {
+  constructor(private fb: FormBuilder, private supabaseService: SupabaseService, private notificationService: NotificationService,
+              private router: Router) {
   }
 
   onSubmit() {
@@ -25,7 +27,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('/projects')
         },
         error: (err) => {
-          this.supabaseService.showMessage('error', err.message)
+          this.notificationService.showMessage('error', err.message)
         }
       })
   }

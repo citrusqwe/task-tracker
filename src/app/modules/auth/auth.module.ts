@@ -8,18 +8,21 @@ import {NzFormModule} from "ng-zorro-antd/form";
 import {NzInputModule} from "ng-zorro-antd/input";
 import {RouterModule} from "@angular/router";
 import {ReactiveFormsModule} from "@angular/forms";
+import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
+import {NzResultModule} from "ng-zorro-antd/result";
 
 
 @NgModule({
-  declarations: [AuthComponent, LoginComponent, RegisterComponent],
-  imports: [
-    CommonModule,
-    NzButtonModule,
-    NzFormModule,
-    NzInputModule,
-    RouterModule,
-    ReactiveFormsModule
-  ],
+  declarations: [AuthComponent, LoginComponent, RegisterComponent, EmailVerificationComponent],
+    imports: [
+        CommonModule,
+        NzButtonModule,
+        NzFormModule,
+        NzInputModule,
+        RouterModule,
+        ReactiveFormsModule,
+        NzResultModule
+    ],
   exports: [
     AuthComponent
   ]

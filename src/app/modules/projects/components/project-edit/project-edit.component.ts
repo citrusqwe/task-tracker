@@ -3,6 +3,8 @@ import {ActivatedRoute} from "@angular/router";
 import {SupabaseService} from "../../../../services/supabase.service";
 import {debounceTime, distinctUntilChanged, switchMap} from "rxjs";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import {ProjectsService} from "../../services/projects.service";
+import {NotificationService} from "../../../../services/notification.service";
 
 @Component({
   selector: 'app-project-edit',
@@ -13,6 +15,8 @@ export class ProjectEditComponent implements OnInit {
   project: any | null = null;
   isLoading: boolean = false;
   isModalVisible: boolean = false;
+  searchedUsers: any = [];
+  selectedUser: any | null = null;
 
   roles: any = [
     {label: 'Разработчик', value: 'developer'},
@@ -35,19 +39,47 @@ export class ProjectEditComponent implements OnInit {
   })
 
   searchUsersForm = this.fb.group({
-    term: new FormControl(),
+    term: new FormControl(null, [Validators.required]),
     field: new FormControl<string>('username')
   })
 
-  constructor(private route: ActivatedRoute, private supabaseService: SupabaseService, private fb: FormBuilder) {
+  constructor(private route: ActivatedRoute, private supabaseService: SupabaseService,
+              private projectsService: ProjectsService, private notificationService: NotificationService,
+              private fb: FormBuilder) {
   }
 
   addUser() {
-
+    if (this.selectedUser) {
+      const userToAdd = {
+        id: this.selectedUser.id,
+        email: this.selectedUser.email,
+        username: this.selectedUser.username,
+        full_name: this.selectedUser.full_name,
+        role: this.teamForm.controls.role.getRawValue(),
+        isCreator: false
+      };
+      const usersList = [...this.project.users, userToAdd];
+      console.log(usersList)
+      this.projectsService.addUserToProject(this.project.id, usersList).subscribe({
+        next: (data) => {
+          console.log(data)
+          this.notificationService.showMessage('success', 'Пользователь успешно добавлен в команду');
+          this.closeModal();
+        }, error: (error) => {
+          this.notificationService.showMessage('error', error.message);
+        }
+      });
+    } else {
+      this.notificationService.showMessage('error', 'Не удалось выбрать пользователя. Попробуйте снова.')
+    }
   }
 
-  searchUsers() {
-
+  closeModal() {
+    this.isModalVisible = false;
+    this.searchUsersForm.patchValue({
+      term: null,
+      field: 'username'
+    })
   }
 
   loadProject() {
@@ -56,18 +88,32 @@ export class ProjectEditComponent implements OnInit {
       .pipe(switchMap((params) => this.supabaseService.getProject(params['id'])))
       .subscribe(({data}) => {
         this.form.patchValue(data[0]);
+        console.log(data)
         this.project = data[0];
         this.isLoading = false;
       })
   }
 
-  ngOnInit(): void {
+  selectUser(user
+               :
+               any
+  ) {
+    this.selectedUser = user;
+  }
+
+  searchUsers() {
     this.searchUsersForm.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged(), switchMap(data => this.supabaseService.searchUsers(data.field || '', data.term)))
       .subscribe(data => {
         console.log(data)
+        this.searchedUsers = data;
       })
+  }
 
+  ngOnInit()
+    :
+    void {
+    this.searchUsers();
     this.loadProject();
   }
 }

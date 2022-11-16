@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AuthChangeEvent, createClient, Session, SupabaseClient} from "@supabase/supabase-js";
 import {environment} from "../../environments/environment";
-import {BehaviorSubject, catchError, from, map, tap, throwError} from "rxjs";
-import {NzMessageService} from "ng-zorro-antd/message";
+import {BehaviorSubject, catchError, from, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ export class SupabaseService {
   executors = new BehaviorSubject<any>([]);
   executors$ = this.executors.asObservable();
 
-  constructor(private message: NzMessageService) {
+  constructor() {
   }
 
   get user() {
@@ -81,11 +80,14 @@ export class SupabaseService {
 
   signUp(data: any) {
     const response = new Promise<any>(async (resolve, reject) => {
-      console.log(data)
       const {user, error} = await this.supabase.auth
         .signUp({email: data.email, password: data.password}, {
           data: {
             full_name: `${data.firstName} ${data.lastName}`,
+            first_name: data.firstName,
+            last_name: data.lastName,
+            email: data.email,
+            username: data.username
           }
         });
       if (error) {
@@ -113,6 +115,8 @@ export class SupabaseService {
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error, count} = await this.supabase.from('projects')
         .select('*', {count: 'exact'})
+      // .contains('users', JSON.stringify([{id: this.user?.id}]));
+      // Пофиксить получение проектов
       if (error) {
         reject(error)
       } else {
@@ -230,10 +234,6 @@ export class SupabaseService {
       }
     })
     return from(response).pipe(catchError(err => throwError(err)))
-  }
-
-  showMessage(type: string, message: string) {
-    this.message.create(type, message)
   }
 
   signOut() {

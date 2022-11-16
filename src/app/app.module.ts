@@ -11,7 +11,6 @@ import {BoardModule} from "./modules/board/board.module";
 import {AuthModule} from "./modules/auth/auth.module";
 import {ProjectsModule} from "./modules/projects/projects.module";
 import {SharedModule} from "./modules/shared/shared.module";
-import {ProfileComponent} from "./modules/profile/profile.component";
 import {ProfileModule} from "./modules/profile/profile.module";
 
 registerLocaleData(en);

@@ -4,9 +4,8 @@
       <div nz-row nzGutter="16">
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label>Состояние</nz-form-label>
             <nz-form-control>
-              <nz-select nzMode="multiple">
+              <nz-select nzPlaceHolder="Проект">
                 <nz-option nzLabel="first"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -14,9 +13,8 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label>Исполнитель</nz-form-label>
             <nz-form-control>
-              <nz-select nzMode="multiple">
+              <nz-select nzPlaceHolder="Состояние" nzMode="multiple">
                 <nz-option nzLabel="first"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -24,9 +22,8 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label>Тип</nz-form-label>
             <nz-form-control>
-              <nz-select nzMode="multiple">
+              <nz-select nzPlaceHolder="Исполнитель" nzMode="multiple">
                 <nz-option nzLabel="first"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -34,7 +31,15 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label></nz-form-label>
+            <nz-form-control>
+              <nz-select nzPlaceHolder="Тип" nzMode="multiple">
+                <nz-option nzLabel="first"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
             <nz-form-control>
               <input nz-input placeholder="Искать задачи">
             </nz-form-control>
@@ -42,7 +47,6 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label></nz-form-label>
             <nz-form-control>
               <button nz-button nzType="primary" (click)="showModal($event)">Создать задачу</button>
             </nz-form-control>
