@@ -115,8 +115,8 @@ export class SupabaseService {
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error, count} = await this.supabase.from('projects')
         .select('*', {count: 'exact'})
+        .contains('access', [this.user?.id]);
       // .contains('users', JSON.stringify([{id: this.user?.id}]));
-      // Пофиксить получение проектов
       if (error) {
         reject(error)
       } else {
@@ -154,10 +154,12 @@ export class SupabaseService {
     return from(response).pipe(catchError(err => throwError(err)))
   }
 
-  getAllIssues() {
+  getAllIssues(projects: any[]) {
+    const idsOfProjects: string[] = projects.map((project) => project.id);
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error, count} = await this.supabase.from('issues')
         .select('*', {count: 'exact'})
+        .in('projectId', idsOfProjects)
       if (error) {
         reject(error)
       } else {

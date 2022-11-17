@@ -67,8 +67,13 @@ export class ProjectsCreateComponent implements OnInit {
         this.form.get(key)?.updateValueAndValidity()
       })
     } else {
-      this.supabaseService.createProject(this.form.getRawValue()).subscribe({
+
+      this.supabaseService.createProject({
+        ...this.form.getRawValue(),
+        access: [this.supabaseService.user?.id]
+      }).subscribe({
         next: () => {
+          this.notificationService.showMessage('success', 'Проект успешно создан');
           this.router.navigateByUrl('/projects')
         }, error: (err) => {
           this.notificationService.showMessage('error', err.message);

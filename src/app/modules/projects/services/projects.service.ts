@@ -14,9 +14,10 @@ export class ProjectsService {
   }
 
   addUserToProject(projectId: number, usersList: any[]) {
+    const usersIdList = usersList.map((user) => (user.id));
     const response = new Promise<any>(async (resolve, reject) => {
       const {error} = await this.supabase.from('projects')
-        .update({users: usersList})
+        .update({users: usersList, access: usersIdList})
         .eq('id', projectId)
         .select()
 

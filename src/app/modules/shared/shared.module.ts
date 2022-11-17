@@ -13,23 +13,25 @@ import {NzIconModule} from "ng-zorro-antd/icon";
 import {NzFormModule} from "ng-zorro-antd/form";
 import {NzGridModule} from "ng-zorro-antd/grid";
 import {MainLayoutComponent} from "../../components/main-layout/main-layout.component";
+import {NzSpinModule} from "ng-zorro-antd/spin";
 
 @NgModule({
   declarations: [HeaderComponent, SelectProjectComponent, SelectExecutorComponent, MainLayoutComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    NzDropDownModule,
-    NzSelectModule,
-    HttpClientModule,
-    NzMessageModule,
-    NzIconModule,
-    NzFormModule,
-    NzGridModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        NzDropDownModule,
+        NzSelectModule,
+        HttpClientModule,
+        NzMessageModule,
+        NzIconModule,
+        NzFormModule,
+        NzGridModule,
+        NzSpinModule
+    ],
   exports: [HeaderComponent, SelectProjectComponent, SelectExecutorComponent, MainLayoutComponent]
 })
 export class SharedModule {

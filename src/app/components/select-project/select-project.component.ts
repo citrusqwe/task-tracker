@@ -19,7 +19,7 @@ export class SelectProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.supabaseService.projects$.subscribe(({data, count}) => {
+    this.supabaseService.projects$.subscribe((data) => {
       this.options = data?.map((item: any) => {
         return {
           label: item.name, value: item.id

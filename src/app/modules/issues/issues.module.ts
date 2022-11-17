@@ -15,6 +15,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {NzSpinModule} from "ng-zorro-antd/spin";
 import {SelectProjectComponent} from "../../components/select-project/select-project.component";
 import {SharedModule} from "../shared/shared.module";
+import {NzSpaceModule} from "ng-zorro-antd/space";
 
 const routes: Routes = [
   {
@@ -25,21 +26,22 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [IssuesComponent, IssuePreviewComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    SharedModule,
-    NzTableModule,
-    NzFormModule,
-    NzSelectModule,
-    NzInputModule,
-    NzWaveModule,
-    NzButtonModule,
-    NzIconModule,
-    NzModalModule,
-    ReactiveFormsModule,
-    NzSpinModule
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        SharedModule,
+        NzTableModule,
+        NzFormModule,
+        NzSelectModule,
+        NzInputModule,
+        NzWaveModule,
+        NzButtonModule,
+        NzIconModule,
+        NzModalModule,
+        ReactiveFormsModule,
+        NzSpinModule,
+        NzSpaceModule
+    ],
   exports: [IssuesComponent]
 })
 export class IssuesModule {
