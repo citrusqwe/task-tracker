@@ -169,7 +169,7 @@ export class SupabaseService {
     return from(response).pipe(catchError(err => throwError(err)))
   }
 
-  getIssue(id: number) {
+  getIssue(id: number | null) {
     const response = new Promise<any>(async (resolve, reject) => {
       if (id) {
         const {data, error} = await this.supabase.from('issues')

@@ -17,10 +17,7 @@ export class IssueService {
   updateIssue(id: number, data: any) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {error} = await this.supabase.from('issues')
-        .update({
-          title: data.title,
-          description: data.description
-        })
+        .update(data)
         .eq('id', id)
       if (error) {
         reject(error)

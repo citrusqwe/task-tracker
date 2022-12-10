@@ -4,7 +4,7 @@
       <button nz-button (click)="closePreview()"><span nz-icon nzType="close" nzTheme="outline"></span>Закрыть панель
         быстрого просмотра
       </button>
-      <div>{{projectId}}</div>
+      <a [routerLink]="'/issues/' + issue.id">{{projectId}}</a>
     </div>
     <div class="issue-preview__hero">
       <div class="issue-preview__authors authors">

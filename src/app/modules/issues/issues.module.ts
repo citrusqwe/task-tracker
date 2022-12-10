@@ -13,35 +13,41 @@ import {NzIconModule} from "ng-zorro-antd/icon";
 import {NzModalModule} from "ng-zorro-antd/modal";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NzSpinModule} from "ng-zorro-antd/spin";
-import {SelectProjectComponent} from "../../components/select-project/select-project.component";
 import {SharedModule} from "../shared/shared.module";
 import {NzSpaceModule} from "ng-zorro-antd/space";
+import {IssueComponent} from './components/issue/issue.component';
+import {NzListModule} from "ng-zorro-antd/list";
 
 const routes: Routes = [
   {
     path: '',
     component: IssuesComponent
+  },
+  {
+    path: ':id',
+    component: IssueComponent
   }
 ];
 
 @NgModule({
-  declarations: [IssuesComponent, IssuePreviewComponent],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        SharedModule,
-        NzTableModule,
-        NzFormModule,
-        NzSelectModule,
-        NzInputModule,
-        NzWaveModule,
-        NzButtonModule,
-        NzIconModule,
-        NzModalModule,
-        ReactiveFormsModule,
-        NzSpinModule,
-        NzSpaceModule
-    ],
+  declarations: [IssuesComponent, IssuePreviewComponent, IssueComponent],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    SharedModule,
+    NzTableModule,
+    NzFormModule,
+    NzSelectModule,
+    NzInputModule,
+    NzWaveModule,
+    NzButtonModule,
+    NzIconModule,
+    NzModalModule,
+    ReactiveFormsModule,
+    NzSpinModule,
+    NzSpaceModule,
+    NzListModule
+  ],
   exports: [IssuesComponent]
 })
 export class IssuesModule {
