@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {en_US, NZ_I18N} from 'ng-zorro-antd/i18n';
 import {registerLocaleData} from '@angular/common';
-import en from '@angular/common/locales/en';
+import ru from '@angular/common/locales/ru';
 import {IssuesModule} from "./modules/issues/issues.module";
 import {BoardModule} from "./modules/board/board.module";
 import {AuthModule} from "./modules/auth/auth.module";
@@ -13,7 +13,7 @@ import {ProjectsModule} from "./modules/projects/projects.module";
 import {SharedModule} from "./modules/shared/shared.module";
 import {ProfileModule} from "./modules/profile/profile.module";
 
-registerLocaleData(en);
+registerLocaleData(ru);
 
 @NgModule({
   declarations: [AppComponent],

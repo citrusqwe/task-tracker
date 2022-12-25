@@ -62,7 +62,8 @@
         <tr>
           <th>ID</th>
           <th>Заголовок задачи</th>
-          <th>Испольнитель</th>
+          <th>Состояние</th>
+          <th>Дедлайн</th>
           <th>Создана</th>
         </tr>
         </thead>
@@ -70,8 +71,22 @@
         <tr *ngFor="let data of basicTable.data" (click)="openPreview(data.id)">
           <td>{{data.id}}</td>
           <td>{{data.title}}</td>
-          <td>{{data.executor?.email || 'Не назначен'}}</td>
-          <td>{{data.created_at | date}}</td>
+          <td>{{getIssueStateName(data.state)}}</td>
+          <td>
+            <div class="deadline-cell">
+              <ng-container *ngIf="data.isEnded">
+              <span class="deadline-icon" nz-icon nzType="check-circle" nzTheme="twotone"
+                    [nzTwotoneColor]="'#5dc43a'"></span>
+                <span>Завершено</span>
+              </ng-container>
+              <ng-container *ngIf="!data.isEnded">
+              <span class="deadline-icon" nz-icon nzType="clock-circle" nzTheme="twotone"
+                    [nzTwotoneColor]="deadlineIconColor(data.deadline)"></span>
+                <span>{{deadlineWarning(data.deadline)}}</span>
+              </ng-container>
+            </div>
+          </td>
+          <td>{{data.created_at | date: 'mediumDate': '': 'ru-RU'}}</td>
         </tr>
         </tbody>
       </nz-table>
@@ -82,11 +97,11 @@
   </div>
 </div>
 <nz-modal
-  [(nzVisible)]="isCreateModalVisible"
-  [nzContent]="modalContent"
-  [nzFooter]="modalFooter"
-  (nzOnCancel)="handleCreateIssueCancel()"
-  nzWidth="800px"
+    [(nzVisible)]="isCreateModalVisible"
+    [nzContent]="modalContent"
+    [nzFooter]="modalFooter"
+    (nzOnCancel)="handleCreateIssueCancel()"
+    nzWidth="800px"
 >
   <!--  <ng-template #modalTitle></ng-template>-->
 
@@ -94,14 +109,14 @@
     <div class="modal-content">
       <div class="modal-content__form form">
         <div class="form__header">
-<!--          <div>-->
-<!--            Автор author-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            <nz-select>-->
-<!--              <nz-option></nz-option>-->
-<!--            </nz-select>-->
-<!--          </div>-->
+          <!--          <div>-->
+          <!--            Автор author-->
+          <!--          </div>-->
+          <!--          <div>-->
+          <!--            <nz-select>-->
+          <!--              <nz-option></nz-option>-->
+          <!--            </nz-select>-->
+          <!--          </div>-->
         </div>
         <div>
           <form nz-form [formGroup]="form">
@@ -154,8 +169,16 @@
           <nz-form-item>
             <nz-form-label>Испольнитель</nz-form-label>
             <nz-form-control>
-              <nz-select [formControlName]="'executor'" [nzOptions]="projectExecutors" nzAllowClear="true" nzPlaceHolder="Выберите">
+              <nz-select [formControlName]="'executor'" [nzOptions]="projectExecutors" nzAllowClear="true"
+                         nzPlaceHolder="Выберите">
               </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>Дедлайн</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker [nzDisabledDate]="disabledStartDate" [formControlName]="'deadline'"
+                              nzPlaceHolder="Выберите дату"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </form>

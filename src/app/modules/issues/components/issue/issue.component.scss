@@ -1,0 +1,91 @@
+@import "src/app/styles/vars";
+
+.issue {
+  display: flex;
+  gap: 40px;
+
+  &__top {
+    margin-bottom: 20px;
+  }
+
+  &__info {
+    flex: 0.8;
+  }
+
+  &__form {
+    flex: 0.2;
+
+    padding: 10px 15px;
+    border: 1px solid $border-light-color;
+  }
+}
+
+.issue-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+
+  &__title {
+    margin-right: 7px;
+    margin-bottom: 0;
+  }
+
+  &__btn {
+    &:not(:last-child) {
+      margin-right: 7px;
+    }
+  }
+}
+
+.selects-form {
+  width: 100%;
+
+  &__label {
+    min-width: 100px;
+    text-align: start;
+  }
+}
+
+.issue-header {
+  margin-bottom: 25px;
+}
+
+.issue-wrapper {
+  padding: 0 30px;
+}
+
+.comments {
+  display: flex;
+
+  &__form {
+    width: 100%;
+  }
+
+  &__user {
+    margin-right: 15px;
+  }
+
+  &__form {
+    flex: 1;
+  }
+
+  &__form-btn {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
+
+.textarea-control {
+  position: relative;
+
+  &__item {
+    min-height: 70px;
+  }
+
+  &__btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}

@@ -1,0 +1,167 @@
+<div *ngIf="!isLoading" class="issue-wrapper">
+  <div class="issue-header">
+    <button nz-button (click)="toIssues()">Вернуться к задачам</button>
+  </div>
+  <div *ngIf="issue" class="issue">
+    <div class="issue__info">
+      <ng-container *ngIf="!isEdit">
+        <div class="issue__top">
+          <div>
+            Автор:
+            <span>{{issue.creator.user_metadata.full_name}}</span>
+          </div>
+        </div>
+        <div class="issue-title">
+          <h3 class="issue-title__title">{{issue.title}}</h3>
+          <button class="issue-title__btn" nz-button nzShape="circle" (click)="isEdit = true"><span nz-icon
+                                                                                                    nzType="edit"
+                                                                                                    nzTheme="outline"></span>
+          </button>
+          <button class="issue-title__btn" nz-button nzShape="circle"><span nz-icon nzType="ellipsis"
+                                                                            nzTheme="outline"></span>
+          </button>
+        </div>
+        <p>{{issue.description}}</p>
+        <nz-list nzItemLayout="horizontal" [nzLoading]="isLoading">
+          <nz-list-item *ngFor="let item of issueComments; let index = index">
+            <nz-list-item-meta
+                nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                [nzDescription]="item?.creator?.user_metadata?.full_name || 'Без имени'"
+            >
+              <nz-list-item-meta-title>
+                <p *ngIf="!item.isEdit">{{ item.comment }}</p>
+                <form nz-form *ngIf="item.isEdit" [formGroup]="commentsEditForm">
+                  <nz-form-item>
+                    <nz-form-control>
+                      <textarea formControlName="comment" nz-input></textarea>
+                    </nz-form-control>
+                  </nz-form-item>
+                  <nz-form-item>
+                    <div nz-form>
+                      <nz-space>
+                        <button *nzSpaceItem nz-button nzType="primary" (click)="updateComment(item, index)" [disabled]="form.invalid">
+                          Сохранить
+                        </button>
+                        <button *nzSpaceItem nz-button (click)="closeCommentEdit(item)">Отмена</button>
+                      </nz-space>
+                    </div>
+                  </nz-form-item>
+                </form>
+              </nz-list-item-meta-title>
+            </nz-list-item-meta>
+            <ul nz-list-item-actions *ngIf="isMyComment(item?.creator)">
+              <nz-list-item-action><a>
+                <button class="issue-title__btn" nz-button nzShape="circle" (click)="openCommentEdit(item)"><span nz-icon
+                                                                                  nzType="edit"
+                                                                                  nzTheme="outline"></span>
+                </button>
+              </a></nz-list-item-action>
+              <nz-list-item-action><a>
+                <button class="issue-title__btn" nz-button nzShape="circle"
+                        (click)="removeComment(item?.uid, index)"><span nz-icon nzType="delete"
+                                                                        nzTheme="outline"></span></button>
+              </a></nz-list-item-action>
+            </ul>
+          </nz-list-item>
+          <nz-list-empty *ngIf="issueComments.length === 0"></nz-list-empty>
+        </nz-list>
+        <form [formGroup]="commentsForm" class="comments__form">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-control class="textarea-control">
+                <textarea [formControlName]="'comment'" class="textarea-control__item" nz-input></textarea>
+                <button class="textarea-control__btn" nz-button nzShape="circle">
+                  <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                </button>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <div nz-row>
+                <button class="comments__form-btn" nz-button nzType="primary" (click)="saveComment()"
+                        [disabled]="commentsForm.invalid">Добавить
+                  комментарий
+                </button>
+                <!--                <button class="comments__form-btn" nz-button>Отмена</button>-->
+              </div>
+            </nz-form-item>
+          </div>
+        </form>
+      </ng-container>
+      <div *ngIf="isEdit">
+        <form class="issue-preview__edit-form" nz-form [formGroup]="form">
+          <nz-form-item>
+            <nz-form-control>
+              <input type="text" nz-input [formControlName]="'title'">
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control>
+              <textarea class="issue-preview__textarea" type="text" nz-input
+                        [formControlName]="'description'"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <div nz-form>
+              <nz-space>
+                <button *nzSpaceItem nz-button nzType="primary" (click)="updateIssue()" [disabled]="form.invalid">
+                  Сохранить
+                </button>
+                <button *nzSpaceItem nz-button (click)="isEdit = false">Отмена</button>
+              </nz-space>
+            </div>
+          </nz-form-item>
+        </form>
+      </div>
+    </div>
+    <div class="issue__form">
+      <form nz-form [formGroup]="selectsForm" class="selects-form">
+        <div>
+          <nz-form-item>
+            <nz-form-label class="selects-form__label">Проект</nz-form-label>
+            <nz-form-control>
+              <app-select-project [elementFormControl]="selectsForm.get('projectId')"></app-select-project>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label class="selects-form__label">Приоритет</nz-form-label>
+            <nz-form-control>
+              <nz-select [formControlName]="'priority'">
+                <nz-option *ngFor="let p of issuePriority" [nzLabel]="p.label" [nzValue]="p.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label class="selects-form__label">Тип</nz-form-label>
+            <nz-form-control>
+              <nz-select [formControlName]="'type'">
+                <nz-option *ngFor="let t of issueTypes" [nzLabel]="t.label" [nzValue]="t.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label class="selects-form__label">Состояние</nz-form-label>
+            <nz-form-control>
+              <nz-select [formControlName]="'state'">
+                <nz-option *ngFor="let s of issueState" [nzLabel]="s.label" [nzValue]="s.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label class="selects-form__label">Исполнитель</nz-form-label>
+            <nz-form-control>
+              <nz-select [nzAllowClear]="true" [nzOptions]="projectExecutors" [formControlName]="'executor'">
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!--        <div nz-row>-->
+        <!--          <nz-form-item>-->
+        <!--            <nz-form-control>-->
+        <!--              <button nz-button nzType="primary" [disabled]="form.invalid" (click)="updateIssue()">Сохранить</button>-->
+        <!--            </nz-form-control>-->
+        <!--          </nz-form-item>-->
+        <!--        </div>-->
+      </form>
+    </div>
+  </div>
+</div>

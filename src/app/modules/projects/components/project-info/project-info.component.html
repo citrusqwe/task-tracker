@@ -1,5 +1,6 @@
-<div *ngIf="!isLoading else loading">
-  <nz-page-header [nzTitle]="project.name">
+<!--<div *ngIf="!isLoading else loading">-->
+<div>
+  <nz-page-header [nzTitle]="project?.name">
   </nz-page-header>
   <div class="project-info">
     <div class="project-sidebar">
@@ -8,15 +9,15 @@
       </nz-card>
     </div>
     <div class="project-grid">
-      <nz-card [nzTitle]="project.name + ' команда'">
-        <p>Card content</p>
-        <p>Card content</p>
-        <p>Card content</p>
+      <nz-card [nzTitle]="'Эффективность работников на проекте ' + project?.name">
+        <div class="chart-container">
+          <canvas #canvas id="chart"></canvas>
+        </div>
       </nz-card>
-      <nz-card [nzTitle]="project.name + ' задачи'">
-        <p>Card content</p>
-        <p>Card content</p>
-        <p>Card content</p>
+      <nz-card [nzTitle]="'Неудачи работников на проекте ' + project?.name">
+        <div class="chart-container">
+          <canvas #overdueCanvas id="overdueChart"></canvas>
+        </div>
       </nz-card>
     </div>
   </div>

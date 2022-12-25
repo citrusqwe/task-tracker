@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {EMPTY, Subject, switchMap, takeUntil, tap} from "rxjs";
+import {debounceTime, distinctUntilChanged, EMPTY, Subject, switchMap, takeUntil, tap} from "rxjs";
 import {SupabaseService} from "../../../../services/supabase.service";
 import {issueTypes, issuePriority, issueState} from "../../../../consts/index";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
@@ -36,7 +36,8 @@ export class IssuePreviewComponent implements OnInit, OnDestroy {
     priority: new FormControl(),
     type: new FormControl(),
     state: new FormControl(),
-    executor: new FormControl()
+    executor: new FormControl(),
+    deadline: new FormControl()
   });
 
   commentsForm = this.fb.group({
@@ -47,6 +48,13 @@ export class IssuePreviewComponent implements OnInit, OnDestroy {
               private issueService: IssueService, private notificationService: NotificationService) {
   }
 
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue) {
+      return false;
+    }
+    return startValue.getTime() <= new Date().getTime();
+  };
+
   closePreview() {
     this.router.navigate([], {queryParams: {}});
   }
@@ -54,20 +62,21 @@ export class IssuePreviewComponent implements OnInit, OnDestroy {
   loadIssue() {
     this.isLoading = true;
     this.route.queryParams
-      .pipe(takeUntil(this.destroy$), switchMap(params => this.supabaseService.getIssue(params['issue'])))
-      .subscribe(data => {
-        this.issue = data[0];
-        this.form.patchValue({
-          ...this.issue
-        });
-        this.selectsForm.patchValue({
-          ...this.issue
-        });
-        this.commentsForm.patchValue({
-          ...this.issue
-        });
-        this.isLoading = false;
+    .pipe(takeUntil(this.destroy$), switchMap(params => this.supabaseService.getIssue(params['issue'])))
+    .subscribe(data => {
+      this.issue = data[0];
+      this.form.patchValue({
+        ...this.issue
       });
+      this.selectsForm.patchValue({
+        ...this.issue
+      });
+      this.commentsForm.patchValue({
+        ...this.issue
+      });
+      this.checkOverdue(data[0]?.deadline);
+      this.isLoading = false;
+    });
   }
 
   updateIssue() {
@@ -97,26 +106,40 @@ export class IssuePreviewComponent implements OnInit, OnDestroy {
 
   loadExecutors() {
     this.selectsForm.controls.projectId.valueChanges
-      .pipe(
-        takeUntil(this.destroy$),
-        tap(id => this.clearExecutorField(id)),
-        switchMap(id => id ? this.supabaseService.getProject(id) : EMPTY)
-      )
-      .subscribe(({data, count}) => {
-        const project = data[0];
-        this.projectId = `${project.projectId}-${this.issue.id}`;
-        this.projectExecutors = project?.users?.map((user: any) => {
-          return {
-            label: user.email,
-            value: user.id
-          }
-        }) || [];
-      })
+    .pipe(
+      takeUntil(this.destroy$),
+      tap(id => this.clearExecutorField(id)),
+      switchMap(id => id ? this.supabaseService.getProject(id) : EMPTY)
+    )
+    .subscribe(({data, count}) => {
+      const project = data[0];
+      this.projectId = `${project.projectId}-${this.issue.id}`;
+      this.projectExecutors = project?.users?.map((user: any) => {
+        return {
+          label: user.email,
+          value: user.id
+        }
+      }) || [];
+    })
+  }
+
+  checkOverdue(deadline: string) {
+    if (deadline) {
+      if (new Date(deadline).getTime() < new Date().getTime()) {
+        this.issueService.updateIssue(this.issue?.id, {isOverdue: true});
+      }
+    }
+  }
+
+  saveSelectOnChanges() {
+    this.selectsForm.valueChanges.pipe(takeUntil(this.destroy$), debounceTime(2000), distinctUntilChanged(), tap(data => this.issueService.currentExecutorId.next(data.executor)), switchMap(data => this.issueService.updateIssue(this.issue?.id, data)))
+    .subscribe();
   }
 
   ngOnInit(): void {
     this.loadIssue();
     this.loadExecutors();
+    this.saveSelectOnChanges();
   }
 
   ngOnDestroy() {

@@ -1,0 +1,3 @@
+<nz-select [formControl]="formControl" (ngModelChange)="onStateChange($event)">
+  <nz-option *ngFor="let s of options" [nzLabel]="s.label" [nzValue]="s.value"></nz-option>
+</nz-select>

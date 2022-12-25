@@ -17,6 +17,7 @@ import {SharedModule} from "../shared/shared.module";
 import {NzSpaceModule} from "ng-zorro-antd/space";
 import {IssueComponent} from './components/issue/issue.component';
 import {NzListModule} from "ng-zorro-antd/list";
+import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
 
 const routes: Routes = [
   {
@@ -46,7 +47,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     NzSpinModule,
     NzSpaceModule,
-    NzListModule
+    NzListModule,
+    NzDatePickerModule
   ],
   exports: [IssuesComponent]
 })

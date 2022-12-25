@@ -81,16 +81,23 @@
             <nz-form-item class="cell" nz-col nzSpan="8">
               <nz-form-label>Состояние</nz-form-label>
               <nz-form-control>
-                <nz-select [formControlName]="'state'">
-                  <nz-option *ngFor="let s of issueState" [nzLabel]="s.label" [nzValue]="s.value"></nz-option>
-                </nz-select>
+                <app-select-state [elementFormControl]="selectsForm.get('state')" [issue]="issue">
+                </app-select-state>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item class="cell" nz-col nzSpan="8">
               <nz-form-label>Исполнитель</nz-form-label>
               <nz-form-control>
-                <nz-select [nzAllowClear]="true" [nzOptions]="projectExecutors" [formControlName]="'executor'">
+                <nz-select nzPlaceHolder="Не выбран" [nzAllowClear]="true" [nzOptions]="projectExecutors"
+                           [formControlName]="'executor'">
                 </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item class="cell" nz-col nzSpan="8">
+              <nz-form-label>Дедлайн</nz-form-label>
+              <nz-form-control>
+                <nz-date-picker [nzDisabledDate]="disabledStartDate" [formControlName]="'deadline'"
+                                nzPlaceHolder="Выберите дату"></nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>

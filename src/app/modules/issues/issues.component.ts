@@ -40,8 +40,9 @@ export class IssuesComponent implements OnInit, OnDestroy {
     priority: new FormControl(2),
     type: new FormControl(2),
     state: new FormControl(1),
-    executor: new FormControl(null)
-  })
+    executor: new FormControl(null),
+    deadline: new FormControl(null)
+  });
 
   constructor(private fb: FormBuilder, private supabaseService: SupabaseService, private router: Router,
               private route: ActivatedRoute, private notificationService: NotificationService) {
@@ -51,6 +52,13 @@ export class IssuesComponent implements OnInit, OnDestroy {
     e.preventDefault();
     this.isCreateModalVisible = true;
   }
+
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue) {
+      return false;
+    }
+    return startValue.getTime() <= new Date().getTime();
+  };
 
   handleCreateIssueCancel() {
     this.form.reset();
@@ -62,6 +70,10 @@ export class IssuesComponent implements OnInit, OnDestroy {
       executor: null
     })
     this.isCreateModalVisible = false;
+  }
+
+  getIssueStateName(state: number) {
+    return this.issueState.find(s => s.value = state)?.label || 'Нету статуса';
   }
 
   createIssue() {
@@ -100,25 +112,65 @@ export class IssuesComponent implements OnInit, OnDestroy {
     }
   }
 
+  deadlineIconColor(deadlineDate: string) {
+    const dateTime = new Date(deadlineDate).getTime();
+    const currentDateTime = new Date().getTime();
+    const deadlineDays = Math.ceil((dateTime - currentDateTime) / (1000 * 3600 * 24));
+    let color = '#5dc43a';
+
+    if (deadlineDays < 6 && deadlineDays > 3) {
+      color = '#cdc523';
+    } else if (deadlineDays > -1000 && deadlineDays < 3) {
+      color = '#eb2f96';
+    }
+
+    return color;
+  }
+
+  deadlineWarning(deadlineDate: string) {
+    if (deadlineDate) {
+      const dateTime = new Date(deadlineDate).getTime();
+      const currentDateTime = new Date().getTime();
+      let deadlineDays = Math.ceil((dateTime - currentDateTime) / (1000 * 3600 * 24));
+      let overdue = 'Просрочен на';
+      let notOverdue = deadlineDays === 1 ? 'Остался' : 'Осталось';
+      let start = deadlineDays <= 0 ? overdue : notOverdue;
+      let end = '';
+      deadlineDays = Math.abs(deadlineDays);
+
+      if (deadlineDays % 10 === 1 && deadlineDays !== 11) {
+        end = 'день';
+      } else if (deadlineDays < 5 && (deadlineDays % 10 > 1 && deadlineDays > 1)) {
+        end = 'дня';
+      } else {
+        end = 'дней';
+      }
+
+      return `${start} ${deadlineDays} ${end}`;
+    }
+
+    return 'Без дедлайна';
+  }
+
   ngOnInit(): void {
     this.executors = [this.supabaseService.user];
     this.form.get('creator')?.setValue(this.supabaseService.user);
     this.projects = this.supabaseService.projects.value;
+    console.log(this.projects)
     this.loadIssues(this.projects);
     this.selectsForm.controls.projectId.valueChanges
-      .pipe(
-        takeUntil(this.destroy$),
-        tap(id => this.clearExecutorField(id)),
-        switchMap(id => id ? this.supabaseService.getProject(id) : EMPTY)
-      )
-      .subscribe(({data, count}) => {
-        const project = data[0];
-        console.log(project)
-        this.projectExecutors = project?.users?.map((user: any) => ({
-          label: user.email,
-          value: user.id
-        })) || [];
-      })
+    .pipe(
+      takeUntil(this.destroy$),
+      tap(id => this.clearExecutorField(id)),
+      switchMap(id => id ? this.supabaseService.getProject(id) : EMPTY)
+    )
+    .subscribe(({data, count}) => {
+      const project = data[0];
+      this.projectExecutors = project?.users?.map((user: any) => ({
+        label: user.full_name || user.email,
+        value: user.id
+      })) || [];
+    })
 
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.isPreviewOpen = !!params['issue'];

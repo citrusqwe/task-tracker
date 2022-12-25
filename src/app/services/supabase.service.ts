@@ -31,8 +31,8 @@ export class SupabaseService {
   profile() {
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error} = await this.supabase.from('profiles').select('*')
-        .eq('id', this.user?.id)
-        .single();
+      .eq('id', this.user?.id)
+      .single();
       if (error) {
         reject(error)
       } else {
@@ -45,9 +45,9 @@ export class SupabaseService {
   updateProfile(id: number, data: any) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {error} = await this.supabase
-        .from('profiles')
-        .update(data)
-        .eq('id', id)
+      .from('profiles')
+      .update(data)
+      .eq('id', id)
       if (error) {
         reject(error)
       } else {
@@ -60,9 +60,9 @@ export class SupabaseService {
   searchUsers(field: string, user: any) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error} = await this.supabase
-        .from('profiles')
-        .select('*')
-        .textSearch(field, user)
+      .from('profiles')
+      .select('*')
+      .textSearch(field, user)
       if (error) {
         reject(error)
       } else {
@@ -81,15 +81,15 @@ export class SupabaseService {
   signUp(data: any) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {user, error} = await this.supabase.auth
-        .signUp({email: data.email, password: data.password}, {
-          data: {
-            full_name: `${data.firstName} ${data.lastName}`,
-            first_name: data.firstName,
-            last_name: data.lastName,
-            email: data.email,
-            username: data.username
-          }
-        });
+      .signUp({email: data.email, password: data.password}, {
+        data: {
+          full_name: `${data.firstName} ${data.lastName}`,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          email: data.email,
+          username: data.username
+        }
+      });
       if (error) {
         reject(error)
       } else {
@@ -114,8 +114,8 @@ export class SupabaseService {
   getProjects() {
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error, count} = await this.supabase.from('projects')
-        .select('*', {count: 'exact'})
-        .contains('access', [this.user?.id]);
+      .select('*', {count: 'exact'})
+      .contains('access', [this.user?.id]);
       // .contains('users', JSON.stringify([{id: this.user?.id}]));
       if (error) {
         reject(error)
@@ -129,8 +129,8 @@ export class SupabaseService {
   getProject(id: number) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error, count} = await this.supabase.from('projects')
-        .select('*', {count: 'exact'})
-        .eq('id', id)
+      .select('*', {count: 'exact'})
+      .eq('id', id)
       if (error) {
         reject(error)
       } else {
@@ -143,8 +143,8 @@ export class SupabaseService {
   getIssues(projectId: number) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error, count} = await this.supabase.from('issues')
-        .select('*', {count: 'exact'})
-        .eq('projectId', projectId)
+      .select('*', {count: 'exact'})
+      .eq('projectId', projectId)
       if (error) {
         reject(error)
       } else {
@@ -158,8 +158,9 @@ export class SupabaseService {
     const idsOfProjects: string[] = projects.map((project) => project.id);
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error, count} = await this.supabase.from('issues')
-        .select('*', {count: 'exact'})
-        .in('projectId', idsOfProjects)
+      .select('*', {count: 'exact'})
+      .in('projectId', idsOfProjects)
+      .order('created_at', {ascending: false})
       if (error) {
         reject(error)
       } else {
@@ -173,8 +174,8 @@ export class SupabaseService {
     const response = new Promise<any>(async (resolve, reject) => {
       if (id) {
         const {data, error} = await this.supabase.from('issues')
-          .select('*')
-          .eq('id', id)
+        .select('*')
+        .eq('id', id)
         if (error) {
           reject(error)
         } else {
@@ -188,7 +189,7 @@ export class SupabaseService {
   createProject(data: any) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {error} = await this.supabase
-        .from('projects').insert(data)
+      .from('projects').insert(data)
       if (error) {
         reject(error)
       } else {
@@ -210,10 +211,10 @@ export class SupabaseService {
     // })
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error} = await this.supabase
-        .from('projects')
-        .update({columns})
-        .eq('id', projectId)
-        .select()
+      .from('projects')
+      .update({columns})
+      .eq('id', projectId)
+      .select()
       if (error) {
         reject(error)
       } else {
@@ -226,9 +227,52 @@ export class SupabaseService {
   createIssue(issue: any) {
     const response = new Promise<any>(async (resolve, reject) => {
       const {data, error} = await this.supabase
-        .from('issues')
-        .insert(issue)
-        .select()
+      .from('issues')
+      .insert(issue)
+      .select()
+      if (error) {
+        reject(error)
+      } else {
+        resolve(data)
+      }
+    })
+    return from(response).pipe(catchError(err => throwError(err)))
+  }
+
+  // getProjectUsersProfiles(ids: string[]) {
+  //   const response = new Promise<any>(async (resolve, reject) => {
+  //     const {data, error} = await this.supabase
+  //     .rpc('project_users_profiles', {ids}).single();
+  //     if (error) {
+  //       reject(error)
+  //     } else {
+  //       resolve(data)
+  //     }
+  //   })
+  //   return from(response).pipe(catchError(err => throwError(err)))
+  // }
+
+  getUsersProfiles(ids: string[]) {
+    const response = new Promise<any>(async (resolve, reject) => {
+      const {data, error} = await this.supabase
+      .from('profiles')
+      .select('*')
+      .in('id', ids);
+      if (error) {
+        reject(error)
+      } else {
+        resolve(data)
+      }
+    })
+    return from(response).pipe(catchError(err => throwError(err)))
+  }
+
+  getUsersIssues(executors: string[]) {
+    const response = new Promise<any>(async (resolve, reject) => {
+      const {data, error} = await this.supabase
+      .from('issues')
+      .select('*')
+      .in('executor', executors);
       if (error) {
         reject(error)
       } else {

@@ -15,8 +15,7 @@ export const issuePriority = [
 export const issueState = [
   {id: 1, label: 'Зарегестрирована', value: 1},
   {id: 2, label: 'Открыта', value: 2},
-  {id: 3, label: 'В обраотке', value: 3},
-  {id: 4, label: 'В обработке', value: 4},
-  {id: 5, label: 'Исправлена', value: 5},
-  {id: 6, label: 'Проверена', value: 6},
+  {id: 3, label: 'В обработке', value: 3},
+  {id: 4, label: 'Исправлена', value: 4},
+  {id: 5, label: 'Проверена', value: 5},
 ];
